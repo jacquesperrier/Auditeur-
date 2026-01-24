@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport de Déneigement</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input, button, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
+        button { background: #007bff; color: white; font-weight: bold; border: none; cursor: pointer; }
+        .photo-btn { background: #28a745; }
+        #preview { width: 100%; border-radius: 5px; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🚜 Rapport Chasse-Neige</h2>
+        <input type="text" id="client" placeholder="Nom du client ou adresse">
+        <textarea id="notes" placeholder="Notes (ex: Accumulation, sel répandu...)"></textarea>
+        
+        <button class="photo-btn" onclick="document.getElementById('camera').click()">📸 Prendre une Photo</button>
+        <input type="file" id="camera" accept="image/*" capture="camera" style="display:none" onchange="previewImage(this)">
+        <img id="preview" src="" alt="Aperçu">
+
+        <button onclick="saveReport()">💾 Enregistrer le Rapport</button>
+    </div>
+
+    <script>
+        function previewImage(input) {
+            const preview = document.getElementById('preview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function saveReport() {
+            const client = document.getElementById('client').value;
+            if(!client) { alert("Entrez le nom du client"); return; }
+            alert("Rapport enregistré pour: " + client);
+            // Ici, on pourrait ajouter la logique pour sauvegarder localement
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
